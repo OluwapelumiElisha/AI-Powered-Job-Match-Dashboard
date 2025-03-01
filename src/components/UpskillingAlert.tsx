@@ -15,7 +15,7 @@ const UpskillingAlert: React.FC<UpskillingAlertProps> = ({ userName, jobTitle, m
         <h2 className="text-2xl font-bold mb-4">🚀 Upskilling Suggestions</h2>
         <p className="text-gray-700 mb-4">
           Hey <span className="font-semibold text-blue-600">{userName}</span>, to apply for{" "}
-          <span className="font-semibold">{jobTitle}</span>, you're missing the following skills:
+          <span className="font-semibold">{jobTitle}</span>, {"you're missing the following skills:"}
         </p>
         <ul className="list-disc list-inside mb-4">
           {missingSkills.map((skill, index) => (
