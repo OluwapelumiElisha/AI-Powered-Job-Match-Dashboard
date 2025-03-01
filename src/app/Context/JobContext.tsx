@@ -1,8 +1,6 @@
 'use client';
-// imports
-import { createContext, useContext, useState, useEffect } from 'react';
-// imports
 
+import { createContext, useContext, useState, useEffect } from 'react';
 // interface for Job 
 interface Job {
   id: number;
@@ -13,19 +11,28 @@ interface Job {
   requiredSkills: string[];
 }
 // interface for Job 
+ 
+// interface for JobContextType 
 
-// interface for JobContextType
 interface JobContextType {
   jobs: Job[];
   selectedJob: Job | null;
   setSelectedJob: (job: Job | null) => void;
-  applyForJob: (jobId: number, userSkills: string[]) => void;
+  applyForJob: (jobId: number, userSkills: string[], userName: string) => void;
   loading: boolean;
   error: string | null;
   calculateMatchScore: (userSkills: string[], requiredSkills: string[]) => number;
   getMissingSkills: (userSkills: string[], requiredSkills: string[]) => string[];
+  showUpskillingAlert: boolean;
+  setShowUpskillingAlert: (show: boolean) => void;
+  missingSkills: string[];
+  setMissingSkills: (skills: string[]) => void;
+  appliedJobTitle: string;
+  setAppliedJobTitle: (title: string) => void;
+  userName: string;
+  setUserName: (name: string) => void;
 }
-// JobContextType
+// interface for JobContextType 
 
 const JobContext = createContext<JobContextType | undefined>(undefined);
 
@@ -33,13 +40,15 @@ export const JobProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [jobs, setJobs] = useState<Job[]>([]);
   const [selectedJob, setSelectedJob] = useState<Job | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  // const [load]
   const [error, setError] = useState<string | null>(null);
+  const [showUpskillingAlert, setShowUpskillingAlert] = useState<boolean>(false);
+  const [missingSkills, setMissingSkills] = useState<string[]>([]);
+  const [appliedJobTitle, setAppliedJobTitle] = useState<string>('');
+  const [userName, setUserName] = useState<string>('');
 
   // Fetch jobs from the API
   useEffect(() => {
     const fetchJobs = async () => {
-      
       try {
         const response = await fetch('https://67bdb194321b883e790d8762.mockapi.io/api/elisha/v1/Job-Details');
         if (!response.ok) {
@@ -69,21 +78,43 @@ export const JobProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   // Apply for job
-  const applyForJob = (jobId: number, userSkills: string[]) => {
+  const applyForJob = (jobId: number, userSkills: string[], userName: string) => {
     const job = jobs.find((job) => job.id === jobId);
     if (!job) return;
 
     const missingSkills = getMissingSkills(userSkills, job.requiredSkills);
     if (missingSkills.length > 0) {
-      alert(`You're missing these skills: ${missingSkills.join(', ')}. Consider upskilling!`);
+      setMissingSkills(missingSkills);
+      setAppliedJobTitle(job.title);
+      setShowUpskillingAlert(true);
+      setUserName(userName); 
     } else {
-      alert(`Applied for job with ID: ${jobId}`);
+      alert(`Successfully applied for ${job.title}`);
+      setSelectedJob(null);
     }
-    setSelectedJob(null);
   };
 
   return (
-    <JobContext.Provider value={{ jobs, selectedJob, setSelectedJob, applyForJob, loading, error, calculateMatchScore, getMissingSkills }}>
+    <JobContext.Provider
+      value={{
+        jobs,
+        selectedJob,
+        setSelectedJob,
+        applyForJob,
+        loading,
+        error,
+        calculateMatchScore,
+        getMissingSkills,
+        showUpskillingAlert,
+        setShowUpskillingAlert,
+        missingSkills,
+        setMissingSkills,
+        appliedJobTitle,
+        setAppliedJobTitle,
+        userName,
+        setUserName,
+      }}
+    >
       {children}
     </JobContext.Provider>
   );

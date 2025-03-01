@@ -1,39 +1,38 @@
 'use client';
 // imports 
-import { useAuth } from '../../Context/AuthContext';
-import abeezee from '../../../lib/font';
-import Gilroy from '../../../lib/fonts2';
 import { useState } from 'react';
+import { useAuth } from '../../Context/AuthContext';
+import Arimo from '../../../lib/font3';
+import abeezee from '@/lib/font';
 // imports 
 
 const SignupPage = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
   const [skills, setSkills] = useState<string[]>([]);
   const [newSkill, setNewSkill] = useState('');
   const [error, setError] = useState('');
   const { signup, loading } = useAuth();
-  // function handling AddSkill
+
+  // function handling AddSkill 
   const handleAddSkill = () => {
     if (newSkill.trim() && !skills.includes(newSkill.trim())) {
       setSkills([...skills, newSkill.trim()]);
       setNewSkill('');
     }
   };
-  // function handling AddSkill
+  // function handling AddSkill 
 
-  // function handling RemoveSkill
+  // function handling RemoveSkill 
   const handleRemoveSkill = (skill: string) => {
     setSkills(skills.filter((s) => s !== skill));
   };
-  // function handling RemoveSkill
+  // function handling RemoveSkill 
 
   // function handling Submit
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await signup(email, password, skills);
+      await signup(name, skills);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to sign up');
     }
@@ -43,40 +42,27 @@ const SignupPage = () => {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-        <h1 className={`text-2xl font-medium mb-6 ${abeezee.className}`}>Sign Up</h1>
+        <h1 className={`text-2xl font-bold mb-6 ${Arimo.className}`}>Sign Up</h1>
         {error && <p className="text-red-600 mb-4">{error}</p>}
-        {/* Form  */}
+        {/* div carrying form  */}
         <form onSubmit={handleSubmit}>
-          {/* div carrying input type email  */}
+          {/* div carrying input name  */}
           <div className="mb-4">
-            <label className={`${Gilroy.className} block text-gray-700 text-[16px]`}>Email</label>
+            <label className={`block text-[14px] text-gray-700 ${abeezee.className}`}>Name</label>
             <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               className="w-full p-2 border rounded-lg"
               required
             />
           </div>
-          {/* div carrying input type email  */}
+          {/* div carrying input name  */}
 
-          {/* div carrying input type password  */}
-          <div className="mb-4">
-            <label className={`${Gilroy.className} block text-gray-700 text-[16px]`}>Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full p-2 border rounded-lg"
-              required
-            />
-          </div>
-          {/* div carrying input type password  */}
-
-          {/* div carrying input type text  */}
+          {/* div carrying input skill  */}
 
           <div className="mb-4">
-            <label className={`${Gilroy.className} block text-gray-700 text-[16px]`}>Skills</label>
+            <label className={`block text-[14px] text-gray-700 ${abeezee.className}`}>Skills</label>
             <div className="flex gap-2">
               <input
                 type="text"
@@ -111,16 +97,19 @@ const SignupPage = () => {
               ))}
             </div>
           </div>
-          {/* div carrying input type text  */}
-
-          {/* Button handling submit  */}
-          <button disabled={loading}  type="submit" className="w-full bg-[#0148AB] text-white p-2 rounded-lg hover:bg-blue-600">
-          {loading ? 'Signing Up...' : 'Sign Up'}
+          {/* div carrying input skill  */}
+          {/* Submit Button  */}
+          <button
+            type="submit"
+            className="w-full bg-[#0148AB] text-white p-2 rounded-lg hover:bg-blue-600 disabled:bg-blue-300"
+            disabled={loading} // Disable the button while loading
+          >
+            {loading ? 'Signing Up...' : 'Sign Up'}
           </button>
-          {/* Button handling submit  */}
+          {/* Submit Button  */}
 
         </form>
-        {/* Form  */}
+        {/* div carrying form  */}
 
       </div>
     </div>

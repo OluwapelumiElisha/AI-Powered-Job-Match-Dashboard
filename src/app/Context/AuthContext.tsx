@@ -2,22 +2,21 @@
 
 import { createContext, useContext, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-// interface for User 
+
+// Interface for User
 interface User {
-  email: string;
+  name: string;
   skills: string[];
 }
-// interface for User 
 
-// interface for AuthContextType 
+// Interface for AuthContextType
 interface AuthContextType {
   user: User | null;
-  signup: (email: string, password: string, skills: string[]) => Promise<void>;
+  signup: (name: string, skills: string[]) => Promise<void>;
   logout: () => void;
   loading: boolean; // Add loading state
 }
-// interface for AuthContextType 
- 
+
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -33,7 +32,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, []);
 
-  const signup = async (email: string, password: string, skills: string[]) => {
+  const signup = async (name: string, skills: string[]) => {
     setLoading(true); // Set loading to true when signup starts
     try {
       // Send signup data to the API
@@ -42,14 +41,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password, skills }),
+        body: JSON.stringify({ name, skills }),
       });
 
       if (!response.ok) {
         throw new Error('Failed to sign up');
       }
 
-      const newUser = { email, skills };
+      const newUser = { name, skills };
       setUser(newUser);
       localStorage.setItem('user', JSON.stringify(newUser));
       router.push('/'); // Redirect to the main page after signup

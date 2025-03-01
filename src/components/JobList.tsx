@@ -18,7 +18,7 @@ const JobList: React.FC = () => {
   }
 
   return (
-    <div className={`${Gilroy.className} space-y-4`}>
+    <div className={`${Gilroy.className} space-y-4 `}>
       {jobs.map((job) => (
         <div
           key={job.id}

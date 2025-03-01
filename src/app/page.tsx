@@ -20,7 +20,7 @@ export default function Home() {
   }, [user, router]);
 
   if (!user) {
-    return null; // Redirecting, so no need to render anything
+    return null; 
   }
   return (
     <div className='bg-[#15c9edad] w-[100%]'>
