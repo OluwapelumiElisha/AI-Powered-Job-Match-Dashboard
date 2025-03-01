@@ -25,7 +25,7 @@ const UpskillingAlert: React.FC<UpskillingAlertProps> = ({ userName, jobTitle, m
           ))}
         </ul>
         <p className="text-gray-700 mb-4">
-          Don't worry! You can learn these skills and boost your match score! 💪
+          {"Don't worry! You can learn these skills and boost your match score! 💪"}
         </p>
         <button
           onClick={onClose}
