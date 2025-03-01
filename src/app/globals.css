@@ -1,0 +1,6 @@
+@import "tailwindcss";
+
+.hero{
+  background: url(/images/Hero-Section.png);
+ 
+}
